@@ -1,0 +1,8 @@
+---
+- name: Starting ABS installation
+  hosts: STN-Trans
+  tasks:
+        - name: Adding feature MSMQ
+          win_feature:
+                      name: MSMQ
+                      state: present
