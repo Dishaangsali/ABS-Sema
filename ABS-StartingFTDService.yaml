@@ -1,0 +1,40 @@
+---
+- name: Starting services in FTD Server
+  hosts: STN-FTD
+  tasks:
+        - name: Starting service
+          win_service:
+                      name: "{{ item }}"
+                      state: started
+          with_items:
+                     - WFTD
+                     - AcresTimeProtocol
+
+- name: Disabling services on Translator Server
+  hosts: STN-Trans
+  tasks:
+        - name: Disabling Service
+          win_service:
+                      name: "{{ item }}"
+                      start_mode: disabled
+          with_items:
+                      - IGT Advantage S2S Transport Service
+                      - IGT Advantage S2S WebService
+
+- name: Setting Translator Config Correctly on registry 
+  hosts: STN-Trans
+  tasks:
+        - name: Updating the value for MaxPinAttempts in HKLM:\SOFTWARE\Wow6432Node\IGT Systems\Translator\AgamPINCache
+          ansible.windows.win_regedit:
+                                      path: 'HKLM:\SOFTWARE\Wow6432Node\IGT Systems\Translator\AgamPINCache'
+                                      name: MaxPinAttempts
+                                      data: 00000004
+                                      type: dword
+          
+- name: Restarting Translator Service
+  hosts: STN-Trans
+  tasks:
+        - name: Restarting service
+          win_service:
+                      name: AbsTranslator
+                      state: restarted
