@@ -1,0 +1,11 @@
+---
+- name: Starting services in Concentrator Server
+  hosts: STN-Conc
+  tasks:
+        - name: Starting service
+          win_service:
+                      name: "{{ item }}"
+                      state: started
+          with_items:
+                      - AcresTimeProtocol
+                      - AbsConc
