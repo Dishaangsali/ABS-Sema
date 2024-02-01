@@ -8,3 +8,32 @@
           win_feature:
                       name: "{{ featurename }}"
                       state: present
+
+- name: IPS Installer
+  hosts: STN-Trans
+  vars_prompt:
+              - name: UserInput
+                prompt: "Please proceed with the IPS steps manually by sbelecting following services in Translator Server \n 27-ABS Translator Installer \n Press [y] to continue"
+                private: false
+  tasks:
+        - name: Proceeding to the further steps of ABS Install
+          when: UserInput == "y"
+          debug:
+            msg: "Proceeding to the further steps of ABS Install"
+
+        - name: Aborting Script as user has declined
+          when: UserInput == "n"
+          fail:
+            msg: "User does not want to proceed"
+
+- name: Starting services in Translator Server
+  hosts: STN-Trans
+  tasks:
+        - name: Starting Service
+          win_service:
+                      name: "{{ item }}"
+                      state: started
+          with_items:
+                      - ATFTPD
+                      - AcresTimeProtocol
+                      - AbsTranslator
