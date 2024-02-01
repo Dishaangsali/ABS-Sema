@@ -1,8 +1,10 @@
 ---
 - name: Starting ABS installation
   hosts: STN-Trans
+  vars:
+        servicename : "{{ servicename }}"
   tasks:
         - name: Adding feature MSMQ
           win_feature:
-                      name: MSMQ
+                      name: {{ servicename }}
                       state: present
