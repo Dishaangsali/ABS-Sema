@@ -9,3 +9,7 @@
                       name: "{{ featurename }}"
                       state: present
 
+  tasks:
+        - name: IPS Install - Proceed with manual steps ahead
+          debug:
+            msg: "Please proceed with the IPS steps manually by sbelecting following services in Translator Server \n 27-ABS Translator Installer \n Press [y] to continue"
